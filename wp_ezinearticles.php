@@ -1,19 +1,19 @@
 <?php
 /*
-Plugin Name: WP EzineArticles
+Plugin Name: EzineArticles WordPress Plugin
 Plugin URI: http://EzineArticles.com/
 Description: The EzineArticles WordPress Plugin allows you to submit your high quality, original WordPress posts to EzineArticles.com, as well as monitor their review status right from the WordPress administration interface!
-Version: 2.0.6
+Version: 2.0.7
 Author: EzineArticles.com
 Author URI: http://EzineArticles.com/
 */
 
 
-define('WP_EZINEARTICLES_PLUGIN_NAME', 'WP EzineArticles');
+define('WP_EZINEARTICLES_PLUGIN_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_GENERAL_OPTION_NAME', 'ezinearticles_options');
 
-define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.0.6');
+define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.0.7');
 define('WP_EZINEARTICLES_MIN_PHP_VERSION', '4.3');
 define('WP_EZINEARTICLES_MIN_WP_VERSION', '2.7');
 
@@ -86,7 +86,7 @@ function wp_ezinearticles()
 
 <div class="wrap">
 	<h2><?php _e(WP_EZINEARTICLES_PLUGIN_NAME) ?></h2>
-	<p><?php _e('This page is displaying most recent blog posts you have submitted to EzineArticles.com.') ?></p>
+	<p><?php _e('This page is displaying most recent blog posts you have submitted to the EzineArticles.com.') ?></p>
 	<table class="widefat post fixed" cellpadding="0">
 	<thead>
 		<tr>
@@ -101,7 +101,7 @@ function wp_ezinearticles()
 	<?php if(!count($article_list)): ?>
 
 		<tr>
-			<td colspan="4"><?php _e('Sorry, you do not have any blog posts submitted to EzineArticles.') ?></td>
+			<td colspan="4"><?php _e('Sorry, you do not have any blog posts submitted to the EzineArticles.com.') ?></td>
 		</tr>
 
 	<?php else: ?>
@@ -293,8 +293,8 @@ function wp_ezinearticles_account_view()
 		<table width="100%" cellpadding="2" cellspacing="5" class="editform">
 
 			<tr>
-				<td align="left" valign="top" width="25%" nowrap><?php _e('Your EzineArticles Username:')?></td>
-				<td><input type="text" name="ea_email" id="ea_email" size="30" value="<?php echo wp_ezinearticles_get_option('ea_email')?>" tabindex="2">
+				<td align="left" valign="top" width="25%" nowrap><?php _e('Your EzineArticles Username (Email):')?></td>
+				<td><input type="text" name="ea_email" id="ea_email" autocomplete="off" size="30" value="<?php echo wp_ezinearticles_get_option('ea_email')?>" tabindex="2">
 				<small>
 					<br />
 					<?php _e('Enter your EzineArticles Membership Account username (email).') ?><br />
@@ -405,7 +405,7 @@ function wp_ezinearticles_help_view()
 	<hr>
 	<h3><?php _e('2) Fill EzineArticles related fields.') ?></h3>
 	<p>
-		<?php _e('There are several fields that must be filled to allow you to post to EzineArticles.com. They are located in the window labeled \'WP EzineArticles\'.') ?>
+		<?php _e('There are several fields that must be filled to allow you to post to EzineArticles.com. They are located in the window labeled \'EzineArticles\'.') ?>
 	</p>
 	<ul>
 		<li>
@@ -451,7 +451,7 @@ function wp_ezinearticles_help_view()
 	<p>
 		<b><?php _e('Validate') ?></b> -
 		<?php _e('Validates your article against the EzineArticles Editorial Guidelines. It will tell you if there are any parts of your article that would cause it to be automatically rejected.') ?>
-		<?php _e('You will see a box appear at the bottom of the WP EzineArticles tab with the details of any problems that were encountered.  If you still want these in your WordPress version, ') ?>
+		<?php _e('You will see a box appear at the bottom of the EzineArticles tab with the details of any problems that were encountered.  If you still want these in your WordPress version, ') ?>
 		<?php _e('you should publish for WordPress, edit it, and then submit it to EzineArticles.') ?>
 	</p>
 	<hr>
@@ -1071,7 +1071,7 @@ function wp_ezinearticles_submit()
 		{
 			$data['data'] = 'Error. Could not communicate with EzineArticles.com.';
 			$data['supplemental'] = array('message_type' => 'error');
-			wp_ezinearticles_log_event("wp_ezinearticles_submit: Could not communicate with EzineArticles.com.");
+			wp_ezinearticles_log_event("wp_ezinearticles_submit: Could not communicate with EzineArticles.com. Response Dump: " . print_r($submit_result, true));
 		}
 	}
 	if($post_id && !wp_ezinearticles_is_article($post_id))
@@ -1334,6 +1334,7 @@ function wp_ezinearticles_css()
 #ea-publish-post-wrap { float:right;line-height:23px;text-align:right; }
 #ea-ajax-loading { vertical-align:middle; }
 .ea-premium { color: #CC0000; font-weight:bold;}
+#wp-ezinearticles h3 span{padding-left:21px;font-weight:700; background:url(<?php echo WP_CONTENT_URL . "/plugins/" . WP_EZINEARTICLES_FOLDER . "/img/ea.png"?>) no-repeat scroll 3px 2px transparent}
 </style>
 	<?php
 }
@@ -1608,7 +1609,11 @@ function wp_ezinearticles_js()
 
 			if ($message_alt[0])
 			{
+
 				$message_alt.html(message).attr('className', type);
+				$message_alt.removeClass('updated');
+				$message_alt.html(message).addClass(type);
+
 			}
 			else
 			{
@@ -1622,9 +1627,11 @@ function wp_ezinearticles_js()
 		var $loading = $('#ea-ajax-loading');
 		function toggle_buttons(enable)
 		{
+
 			if (enable)
 			{
 				$buttons.attr('disabled', '');
+				$buttons.removeAttr('disabled');
 				$loading.css('visibility', 'hidden');
 			}
 			else
