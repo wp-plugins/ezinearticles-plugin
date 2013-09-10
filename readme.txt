@@ -3,14 +3,14 @@ Contributors: EzineArticles.com
 Donate link: http://EzineArticles.com/
 Tags: article submission, articles, writers, writing, publishing, ezine, free articles, article directory, printable articles
 Requires at least: 2.7
-Tested up to: 3.2.1
-Stable tag: tags/2.0.7
+Tested up to: 3.6.0
+Stable tag: tags/2.0.8
 
 Submit your high-quality, original WordPress blog posts to the EzineArticles for more exposure, credibility and traffic back to your website.
 
 == Description ==
 
-The EzineArticles WordPress Plugin allows you to submit your high quality, original WordPress blog posts to EzineArticles.com, 
+The EzineArticles WordPress Plugin allows you to submit your high quality, original WordPress blog posts to EzineArticles.com,
 view article review status and article statistics right from the WordPress interface!
 
 == Installation ==
@@ -38,7 +38,7 @@ FTP install directions
 
 Alternate install directions
 
-1. Download the plugin. There is a download button to the right.  
+1. Download the plugin. There is a download button to the right.
 
 2. Unzip the `wp_ezinearticles.zip` file.
 
@@ -80,7 +80,7 @@ Multiuser WordPress is not compatable with this plugin.
 
 = I am unable to upload the plugin to Dreamhost =
 
-You are not be able to upload the plugin to Dreamhost if you cannot write to the wp-content/plugins folder.  
+You are not be able to upload the plugin to Dreamhost if you cannot write to the wp-content/plugins folder.
 The basic 'easy mode' setup does not allow this because Dreamhost does not give you the correct permission to do so.
 If you setup in 'advanced mode', you will be able to write to your plugins folder, and should be able to install custom plugins.
 
@@ -95,6 +95,10 @@ If you setup in 'advanced mode', you will be able to write to your plugins folde
 7. When you have everything working, you will be able to submit an article.
 
 == ChangeLog ==
+
+= 2.0.8 =
+
+* Update compatibility to WordPress 3.6.
 
 = 2.0.7 =
 
@@ -114,7 +118,7 @@ If you setup in 'advanced mode', you will be able to write to your plugins folde
 
 = 2.0.3 =
 
-* When installing the plugin it checks to make sure the api can be reached.  
+* When installing the plugin it checks to make sure the api can be reached.
 If it cannot the plugin will still install, but it will warn the user.
 
 = 2.0.2 =
@@ -155,7 +159,7 @@ If it cannot the plugin will still install, but it will warn the user.
 * Premium members can now schedule from WordPress.
 * Help menu added to the plugin.
 * Bugfix: Fixed dissappearing API key.
-* Bugfix: Fixed dissappearing options by using cookies. 
+* Bugfix: Fixed dissappearing options by using cookies.
 * Bugfix: Fixed a date issue returning epoch time.
 * Bugfix: Improved code structure.
 
