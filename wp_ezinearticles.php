@@ -3,7 +3,7 @@
 Plugin Name: EzineArticles WordPress Plugin
 Plugin URI: http://EzineArticles.com/
 Description: The EzineArticles WordPress Plugin allows you to submit your high quality, original WordPress posts to EzineArticles.com, as well as monitor their review status right from the WordPress administration interface!
-Version: 2.0.9
+Version: 2.1.0
 Author: EzineArticles.com
 Author URI: http://EzineArticles.com/
 */
@@ -13,7 +13,7 @@ define('WP_EZINEARTICLES_PLUGIN_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_GENERAL_OPTION_NAME', 'ezinearticles_options');
 
-define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.0.9');
+define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.1');
 define('WP_EZINEARTICLES_MIN_PHP_VERSION', '4.3');
 define('WP_EZINEARTICLES_MIN_WP_VERSION', '2.7');
 
@@ -99,9 +99,8 @@ function wp_ezinearticles()
 	<tbody>
 
 	<?php if(!count($article_list)): ?>
-
 		<tr>
-			<td colspan="4"><?php _e('Sorry, you do not have any blog posts submitted to the EzineArticles.com.') ?></td>
+			<td colspan="4"><?php _e('You do not currently have any blog posts submitted to the EzineArticles.com. <a href="/wp-admin/edit.php">Submit your first blog post now</a>.') ?></td>
 		</tr>
 
 	<?php else: ?>
@@ -317,7 +316,7 @@ function wp_ezinearticles_account_view()
 		</table>
 
 		<div class="submit">
-			<input type="submit" name="save_settings" value="<?php _e('Save Settings')?>">
+			<input type="submit" class="button button-primary" name="save_settings" value="<?php _e('Save Settings')?>">
 		</div>
 	</form>
 
@@ -350,7 +349,7 @@ function wp_ezinearticles_account_view()
 	</tr>
 	</table>
 		<div class="submit">
-		<input type="submit" name="refresh_account_status" value="<?php _e('Refresh account status')?>">
+		<input type="submit" class="button button-primary" name="refresh_account_status" value="<?php _e('Refresh account status')?>">
 	</div>
 
 	<?php endif; ?>

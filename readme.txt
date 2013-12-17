@@ -3,8 +3,8 @@ Contributors: EzineArticles.com
 Donate link: http://EzineArticles.com/
 Tags: article submission, articles, writers, writing, publishing, ezine, free articles, article directory, printable articles
 Requires at least: 2.7
-Tested up to: 3.6.1
-Stable tag: tags/2.0.9
+Tested up to: 3.8
+Stable tag: tags/2.1
 
 Submit your high-quality, original WordPress blog posts to the EzineArticles for more exposure, credibility and traffic back to your website.
 
@@ -95,6 +95,10 @@ If you setup in 'advanced mode', you will be able to write to your plugins folde
 7. When you have everything working, you will be able to submit an article.
 
 == ChangeLog ==
+
+= 2.1 =
+
+* Update compatibility to WordPress 3.8.
 
 = 2.0.9 =
 
