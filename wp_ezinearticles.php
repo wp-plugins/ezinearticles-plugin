@@ -3,7 +3,7 @@
 Plugin Name: EzineArticles WordPress Plugin
 Plugin URI: http://EzineArticles.com/
 Description: The EzineArticles WordPress Plugin allows you to submit your high quality, original WordPress posts to EzineArticles.com, as well as monitor their review status right from the WordPress administration interface!
-Version: 2.0.9
+Version: 2.2.0
 Author: EzineArticles.com
 Author URI: http://EzineArticles.com/
 */
@@ -13,7 +13,7 @@ define('WP_EZINEARTICLES_PLUGIN_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_NAME', 'EzineArticles');
 define('WP_EZINEARTICLES_GENERAL_OPTION_NAME', 'ezinearticles_options');
 
-define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.0.9');
+define('WP_EZINEARTICLES_PLUGIN_VERSION', '2.2');
 define('WP_EZINEARTICLES_MIN_PHP_VERSION', '4.3');
 define('WP_EZINEARTICLES_MIN_WP_VERSION', '2.7');
 
@@ -24,9 +24,9 @@ define('WP_EZINEARTICLES_PLUGIN_ROOT',  ABSPATH . 'wp-content/plugins/' . WP_EZI
 define('WP_EZINEARTICLES_LOG_FILE', WP_EZINEARTICLES_PLUGIN_ROOT . '/log.txt');
 
 
-if(file_exists(ABSPATH.'wp-includes/class-snoopy.php') && !class_exists("Snoopy"))
+if(file_exists(ABSPATH. WPINC . '/class-snoopy.php') && !class_exists("Snoopy"))
 {
-	include_once(ABSPATH.'wp-includes/class-snoopy.php');
+	include_once(ABSPATH. WPINC . '/class-snoopy.php');
 }
 
 if(is_admin())
@@ -99,9 +99,8 @@ function wp_ezinearticles()
 	<tbody>
 
 	<?php if(!count($article_list)): ?>
-
 		<tr>
-			<td colspan="4"><?php _e('Sorry, you do not have any blog posts submitted to the EzineArticles.com.') ?></td>
+			<td colspan="4"><?php _e('You do not currently have any blog posts submitted to the EzineArticles.com. <a href="/wp-admin/edit.php">Submit your first blog post now</a>.') ?></td>
 		</tr>
 
 	<?php else: ?>
@@ -317,7 +316,7 @@ function wp_ezinearticles_account_view()
 		</table>
 
 		<div class="submit">
-			<input type="submit" name="save_settings" value="<?php _e('Save Settings')?>">
+			<input type="submit" class="button button-primary" name="save_settings" value="<?php _e('Save Settings')?>">
 		</div>
 	</form>
 
@@ -350,7 +349,7 @@ function wp_ezinearticles_account_view()
 	</tr>
 	</table>
 		<div class="submit">
-		<input type="submit" name="refresh_account_status" value="<?php _e('Refresh account status')?>">
+		<input type="submit" class="button button-primary" name="refresh_account_status" value="<?php _e('Refresh account status')?>">
 	</div>
 
 	<?php endif; ?>
@@ -804,7 +803,12 @@ function wp_ezinearticles_install()
 	global $wpdb;
 	wp_ezinearticles_version_check();
 
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	if( file_exists(ABSPATH . 'wp-admin/includes/upgrade.php'))
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	elseif( file_exists(ABSPATH . 'admin/includes/upgrade.php'))
+		require_once(ABSPATH . 'admin/includes/upgrade.php');
+	else
+		exit();
 
 	$create_sql = "CREATE TABLE `{$wpdb->prefix}ezinearticles_diagnostic_log` (
 	`id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -866,7 +870,7 @@ function wp_ezinearticles_install()
 function wp_ezinearticles_connection_test()
 {
 	$s = new Snoopy();
-	$s->read_timeout = 5;
+	$s->read_timeout = 10;
 	$s->submit('http://api.ezinearticles.com/api.php');
 	$results = print_r($s->results,true);
 	if(isset($results) && strlen($results))
@@ -874,10 +878,15 @@ function wp_ezinearticles_connection_test()
 		return null;
 	}
 	else
-		return "<b>Could not contact the EzineArticles.com submission interface.  Possible causes include:<br>
-		* A firewall may be blocking the server from making outbound requests to http://api.ezinearticles.com/.<br>
-		* PHP may not be allowed to open connections on your server.<br>
-		* http://api.ezinearticles.com/ may be experiencing downtime.";
+	{
+		wp_ezinearticles_send_debug_email();
+
+		return "<p>Could not contact the EzineArticles.com submission interface. Possible causes include:<br>
+		<ul><li>A firewall may be blocking the server from making outbound requests to http://api.ezinearticles.com/.</li>
+		<li>PHP may not be allowed to open connections on your server.</li>
+		<li>http://api.ezinearticles.com/ may be experiencing downtime.</li></ul></p>";
+
+	}
 }
 
 
@@ -901,6 +910,24 @@ function wp_ezinearticles_get_setup_info()
 	if(isset($_SERVER['SERVER_ADDR']))
 	{
 		$output[] = " | Server IP: " . $_SERVER['SERVER_ADDR'];
+	}
+
+	if( class_exists("Snoopy"))
+	{
+		$s = new Snoopy();
+		$s->read_timeout = 10;
+		$s->fetch('http://ipecho.net/plain');
+		$public_ip = $s->results;
+	}
+	else
+	{
+		$public_ip = @file_get_contents("http://ipecho.net/plain");
+	}
+
+	if( isset($public_ip) && $public_ip)
+	{
+
+		$output[] = " | Public IP: {$public_ip}";
 	}
 
 	if(isset($_SERVER['SCRIPT_FILENAME']))
