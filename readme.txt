@@ -3,7 +3,7 @@ Contributors: EzineArticles.com
 Donate link: http://EzineArticles.com/
 Tags: article submission, articles, writers, writing, publishing, ezine, free articles, article directory, printable articles
 Requires at least: 2.7
-Tested up to: 4
+Tested up to: 4.2
 Stable tag: tags/2.2.2
 
 Submit your high-quality, original WordPress blog posts to the EzineArticles for more exposure, credibility and traffic back to your website.
